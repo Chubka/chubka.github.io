@@ -57,13 +57,19 @@ adaptive_function();
     $('[required]').removeClass('error');
    });
 
+$('#name').bind("change keyup input click", function() {
+  if (this.value.match(/[^а-яА-Яa-zA-Z\s]/g)) 
+  {this.value = this.value.replace(/[^а-яА-Яa-zA-Z\s]/g, '');}
+});
 
+  $('input[type="tel"]').inputmask({"mask": "+7(999)999-9999"});
+   jQuery.validator.addMethod("checkMask", function(value, element) {
+     return /\+\d{1}\(\d{3}\)\d{3}-\d{4}/g.test(value);  
+});
 
-  $('input[type="tel"]').inputmask({"mask": "+7 (999) 999-9999", greedy: false});
- 
   //E-mail Ajax Send
   $('#myform').each(function () { 
-   var validator = $(this).validate({
+   var valid = $(this).validate({
 
       errorPlacement(error, element) {
             return true;
@@ -71,7 +77,7 @@ adaptive_function();
           rules: {
             tel: {
               required: true,
-              minlength: 10
+              checkMask: true
             },
             name: {
               required: true,
@@ -96,7 +102,7 @@ adaptive_function();
         th.trigger("reset");
       }, 1000);
     });
-    validator.resetForm();
+    valid.resetForm();
     return false;
     }
     
